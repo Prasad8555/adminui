@@ -25,7 +25,7 @@
 .users-list {
   list-style: none;
   padding-inline-start: 0px;
-  min-height: 75vh;
+  min-height: 80vh;
 }
 
 .list-header {
@@ -62,4 +62,9 @@
   font-family: 'Roboto';
   font-size: 24px;
   width: 20vw;
+}
+
+.not-found-image {
+  width: 100vw;
+  background-size: cover;
 }

@@ -1,6 +1,6 @@
 import {Component} from 'react'
 import {TailSpin} from 'react-loader-spinner'
-import Member from '../Member'
+import User from '../User'
 import Pagination from '../Pagination'
 import './index.css'
 
@@ -12,7 +12,7 @@ const requestStatusConstants = {
 
 class Admin extends Component {
   state = {
-    members: [],
+    users: [],
     requestStatus: 'LOADING',
     pagesCount: 0,
     selectAll: false,
@@ -20,10 +20,10 @@ class Admin extends Component {
   }
 
   componentDidMount = () => {
-    this.getMembers()
+    this.getUsers()
   }
 
-  getMembers = async () => {
+  getUsers = async () => {
     this.setState({
       requestStatus: 'LOADING',
     })
@@ -34,13 +34,13 @@ class Admin extends Component {
     const response = await fetch(url)
 
     if (response.ok === true) {
-      const members = await response.json()
-      const updatedMembers = members.map(eachMember => ({
-        ...eachMember,
+      const fetchedData = await response.json()
+      const updatedUsers = fetchedData.map(eachUser => ({
+        ...eachUser,
         isChecked: false,
       }))
       this.setState({
-        members: updatedMembers,
+        users: updatedUsers,
         requestStatus: 'SUCCESS',
       })
     } else {
@@ -67,81 +67,81 @@ class Admin extends Component {
   }
 
   deleteSelected = () => {
-    const {members} = this.state
-    const checkedUsersIds = this.getCheckedUsers(members)
-    const updatedUsers = members.filter(
+    const {users} = this.state
+    const checkedUsersIds = this.getCheckedUsers(users)
+    const updatedUsers = users.filter(
       eachUser => !checkedUsersIds.includes(eachUser.id),
     )
     this.setState({
-      members: updatedUsers,
+      users: updatedUsers,
       selectAll: false,
     })
   }
 
   onClickDelete = id => {
-    const {members} = this.state
-    const remainingMembers = members.filter(each => each.id !== id)
+    const {users} = this.state
+    const remainingUsers = users.filter(eachUser => eachUser.id !== id)
     this.setState({
-      members: remainingMembers,
+      users: remainingUsers,
     })
   }
 
   updateUser = userData => {
-    const {members} = this.state
-    const updatedUsersData = members.map(eachUser => {
+    const {users} = this.state
+    const updatedUsersData = users.map(eachUser => {
       if (eachUser.id === userData.id) {
         return userData
       }
       return eachUser
     })
     this.setState({
-      members: updatedUsersData,
+      users: updatedUsersData,
     })
   }
 
   onChangeMemberCheckbox = id => {
-    const {members} = this.state
-    const updatedMembers = members.map(eachMember => {
-      if (eachMember.id === id) {
+    const {users} = this.state
+    const updatedUsers = users.map(eachUser => {
+      if (eachUser.id === id) {
         const UpdatedMemberData = {
-          ...eachMember,
-          isChecked: !eachMember.isChecked,
+          ...eachUser,
+          isChecked: !eachUser.isChecked,
         }
         return UpdatedMemberData
       }
-      return eachMember
+      return eachUser
     })
     this.setState({
-      members: updatedMembers,
+      users: updatedUsers,
     })
   }
 
   toggleCheckAllCheckboxes = () => {
-    const {selectAll, members} = this.state
+    const {selectAll, users} = this.state
     this.setState({
       selectAll: !selectAll,
     })
 
-    const searchResult = this.getSearchResult(members)
-    const currentPageMembers = this.getCurrentPageMembers(searchResult)
-    const currentPageUsersIds = currentPageMembers.map(each => each.id)
+    const searchResult = this.getSearchResult(users)
+    const currentPageUsers = this.getCurrentPageUsers(searchResult)
+    const currentPageUsersIds = currentPageUsers.map(eachUser => eachUser.id)
     if (selectAll === false) {
-      const updatedUsers = members.map(eachUser => {
+      const updatedUsers = users.map(eachUser => {
         if (currentPageUsersIds.includes(eachUser.id)) {
           return {...eachUser, isChecked: true}
         }
         return eachUser
       })
       this.setState({
-        members: updatedUsers,
+        users: updatedUsers,
       })
     } else {
-      const updatedUsers = members.map(eachUser => ({
+      const updatedUsers = users.map(eachUser => ({
         ...eachUser,
         isChecked: false,
       }))
       this.setState({
-        members: updatedUsers,
+        users: updatedUsers,
       })
     }
   }
@@ -153,39 +153,41 @@ class Admin extends Component {
     })
   }
 
-  getCurrentPageMembers = searchResult => {
+  getCurrentPageUsers = searchResult => {
     const {pagesCount} = this.state
-    const membersPerPage = 10
+    const usersPerPage = 10
     const searchResultLength = searchResult.length
-    const previousPagesMembers = pagesCount * membersPerPage
-    const remainingMembers = searchResultLength - previousPagesMembers
-    let presentPageMembers = []
-    if (remainingMembers <= membersPerPage) {
-      presentPageMembers = searchResult.slice(previousPagesMembers)
+    const previousPagesUsers = pagesCount * usersPerPage
+    const remainingUsers = searchResultLength - previousPagesUsers
+    let presentPageUsers = []
+    if (remainingUsers <= usersPerPage) {
+      presentPageUsers = searchResult.slice(previousPagesUsers)
     } else {
-      presentPageMembers = searchResult.slice(
-        previousPagesMembers,
-        previousPagesMembers + membersPerPage,
+      presentPageUsers = searchResult.slice(
+        previousPagesUsers,
+        previousPagesUsers + usersPerPage,
       )
     }
-    return presentPageMembers
+    return presentPageUsers
   }
 
-  getSearchResult = members => {
-    const {userSearchInput} = this.state
-    const searchResult = members.filter(
-      each =>
-        each.name.toLowerCase().startsWith(userSearchInput.toLowerCase()) ||
-        each.email.toLowerCase().startsWith(userSearchInput.toLowerCase()) ||
-        each.role.toLowerCase().startsWith(userSearchInput.toLowerCase()),
+  getSearchResult = () => {
+    const {userSearchInput, users} = this.state
+    const searchResult = users.filter(
+      eachUser =>
+        eachUser.name.toLowerCase().startsWith(userSearchInput.toLowerCase()) ||
+        eachUser.email
+          .toLowerCase()
+          .startsWith(userSearchInput.toLowerCase()) ||
+        eachUser.role.toLowerCase().startsWith(userSearchInput.toLowerCase()),
     )
     return searchResult
   }
 
   renderSuccessView = () => {
-    const {members, pagesCount, selectAll, userSearchInput} = this.state
-    const searchResult = this.getSearchResult(members)
-    const currentPageMembers = this.getCurrentPageMembers(searchResult)
+    const {users, pagesCount, selectAll, userSearchInput} = this.state
+    const searchResult = this.getSearchResult()
+    const currentPageUsers = this.getCurrentPageUsers(searchResult)
 
     return (
       <>
@@ -196,32 +198,42 @@ class Admin extends Component {
           placeholder="Search by name, email or role"
           className="user-input"
         />
-        <ul className="users-list">
-          <li className="list-header">
-            <input
-              checked={selectAll}
-              onChange={this.toggleCheckAllCheckboxes}
-              type="checkbox"
-              className="header-checkbox"
+        {currentPageUsers.length === 0 ? (
+          <div>
+            <img
+              src="https://res.cloudinary.com/aguruprasad/image/upload/v1644149686/no-users-found_3_km6yk0.png"
+              className="not-found-image"
+              alt="no users found"
             />
-            <h1 className="header-name">Name</h1>
-            <h1 className="header-email">Email</h1>
-            <h1 className="header-role">Role</h1>
-            <h1 className="header-actions">Actions</h1>
-          </li>
-          {currentPageMembers.map(each => (
-            <Member
-              member={each}
-              key={each.id}
-              updateUser={this.updateUser}
-              deleteUser={this.onClickDelete}
-              selectAll={selectAll}
-              onChangeMemberCheckbox={this.onChangeMemberCheckbox}
-            />
-          ))}
-        </ul>
+          </div>
+        ) : (
+          <ul className="users-list">
+            <li className="list-header">
+              <input
+                checked={selectAll}
+                onChange={this.toggleCheckAllCheckboxes}
+                type="checkbox"
+                className="header-checkbox"
+              />
+              <h1 className="header-name">Name</h1>
+              <h1 className="header-email">Email</h1>
+              <h1 className="header-role">Role</h1>
+              <h1 className="header-actions">Actions</h1>
+            </li>
+            {currentPageUsers.map(eachUser => (
+              <User
+                users={eachUser}
+                key={eachUser.id}
+                updateUser={this.updateUser}
+                deleteUser={this.onClickDelete}
+                onChangeUserCheckbox={this.onChangeUserCheckbox}
+              />
+            ))}
+          </ul>
+        )}
+
         <Pagination
-          members={members}
+          users={users}
           deleteSelected={this.deleteSelected}
           pagesCount={pagesCount}
           navigateTo={this.navigateTo}

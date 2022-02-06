@@ -4,7 +4,7 @@ import {FiEdit} from 'react-icons/fi'
 import {AiOutlineDelete} from 'react-icons/ai'
 import './index.css'
 
-class Member extends Component {
+class User extends Component {
   state = {
     editedName: '',
     editedEmail: '',
@@ -13,15 +13,15 @@ class Member extends Component {
   }
 
   onClickDelete = () => {
-    const {deleteUser, member} = this.props
-    const {id} = member
+    const {deleteUser, users} = this.props
+    const {id} = users
     deleteUser(id)
   }
 
   saveEditedUser = () => {
     const {editedName, editedEmail, editedRole} = this.state
-    const {member, updateUser} = this.props
-    const {id} = member
+    const {users, updateUser} = this.props
+    const {id} = users
     const editedUser = {
       id,
       name: editedName,
@@ -54,8 +54,8 @@ class Member extends Component {
   }
 
   onClickEdit = () => {
-    const {member} = this.props
-    const {name, email, role} = member
+    const {users} = this.props
+    const {name, email, role} = users
     this.setState(prevState => ({
       editedName: name,
       editedEmail: email,
@@ -65,15 +65,15 @@ class Member extends Component {
   }
 
   toggleCheckbox = () => {
-    const {onChangeMemberCheckbox, member} = this.props
-    const {id} = member
-    onChangeMemberCheckbox(id)
+    const {onChangeUserCheckbox, users} = this.props
+    const {id} = users
+    onChangeUserCheckbox(id)
   }
 
   render() {
     const {editMode, editedName, editedEmail, editedRole} = this.state
-    const {member} = this.props
-    const {name, email, role, isChecked} = member
+    const {users} = this.props
+    const {name, email, role, isChecked} = users
 
     return (
       <li className="user-item">
@@ -132,4 +132,4 @@ class Member extends Component {
     )
   }
 }
-export default Member
+export default User

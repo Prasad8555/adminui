@@ -15,11 +15,11 @@ import {
 import './index.css'
 
 const Pagination = props => {
-  const {members, pagesCount, navigateTo} = props
-  const membersPerPage = 10
-  const totalMembers = members.length
+  const {users, pagesCount, navigateTo} = props
+  const usersPerPage = 10
+  const totalUsers = users.length
   const totalPages = []
-  for (let i = 1; i <= Math.round(totalMembers / membersPerPage); i += 1) {
+  for (let i = 1; i <= Math.round(totalUsers / usersPerPage); i += 1) {
     totalPages.push(i)
   }
   const pagesLimit = totalPages.slice(-1)
@@ -35,7 +35,7 @@ const Pagination = props => {
   }
 
   const onClickForward = () => {
-    if (pagesLimit > pagesCount - 2) {
+    if (pagesLimit > pagesCount + 1) {
       navigateTo(pagesCount + 2)
     }
   }
