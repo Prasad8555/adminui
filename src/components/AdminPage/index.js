@@ -99,7 +99,7 @@ class Admin extends Component {
     })
   }
 
-  onChangeMemberCheckbox = id => {
+  onChangeUserCheckbox = id => {
     const {users} = this.state
     const updatedUsers = users.map(eachUser => {
       if (eachUser.id === id) {
