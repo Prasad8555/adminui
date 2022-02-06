@@ -1,0 +1,67 @@
+.user-item {
+  display: flex;
+  align-items: center;
+  border-bottom: 0.5px solid gray;
+}
+
+.user-checkbox {
+  width: 14px;
+  height: 14px;
+  margin-right: 14vw;
+}
+
+.user-content {
+  font-family: 'Roboto';
+  width: 20vw;
+}
+
+.actionsContainer {
+  display: flex;
+  width: 6vw;
+  justify-content: space-around;
+}
+
+.edit-icon {
+  font-size: 20px;
+}
+
+.delete-user-icon {
+  color: crimson;
+  font-size: 22px;
+}
+
+.editor-mode-container {
+  display: flex;
+  width: 100%;
+}
+
+.username-input {
+  margin: 6px;
+  margin-left: 15vw;
+  padding: 8px;
+}
+
+.user-email-input {
+  margin: 6px;
+  margin-left: 5vw;
+  padding: 8px;
+}
+
+.user-role-input {
+  margin: 6px;
+  margin-left: 5.5vw;
+  pad: 8px;
+}
+
+.save-button {
+  margin: 6px;
+  margin-left: 7vw;
+  font-family: 'Roboto';
+  font-size: 16px;
+  color: aliceblue;
+  background-color: rgb(0, 116, 211);
+  border: 0px solid;
+  border-radius: 8px;
+  width: 90px;
+  height: 32px;
+}
