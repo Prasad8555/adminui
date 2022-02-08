@@ -8,6 +8,10 @@ In this project, let's build a **Admin UI** by using the React js concepts.
 </div>
 <br/>
 
+### **To Start** 
+
+> - Run this commands in terminal `npm install`, `npm install react-loader-spinnser --save`, `npm install styled-components --save`. 
+
 > ### **About above project**
 >
 > - In this admin page we can monitor who are in our database and `we can edit the user data, we can delete the user` also `we can select users and delete multiple users at a time.`
